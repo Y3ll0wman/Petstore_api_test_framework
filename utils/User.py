@@ -9,20 +9,17 @@ class UserApi:
     def create():
         """Создаем пользователя"""
         try:
-            # Собираем полезную нагрузку и заголовки для запроса на API эндпоинт
+            # Собираем полезную нагрузку
             create_user_request = UserCreate.CreateUserRequest.parse_raw(UserCreate.input_json)
+            # Выводим на печать Request body
             print(f"Request body: {UserCreate.input_json}")
-            j = create_user_request.json()
-            url = f"{ApiClient.api_url()}/v2/user"
-            payload = j
-            headers = ApiClient.headers()
             # Отправить GET запрос на /v2/user для создания пользователя
-            response = requests.request("POST", url, headers=headers, data=payload)
+            response = requests.request("POST", f"{ApiClient.api_url()}/v2/user", headers=ApiClient.headers(), data=create_user_request.json())
             create_user_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, f"User creation error, response code: {response.status_code}," \
                                                 f"response body: {response.json()}"
-            # Проверяем типы данных в полученном теле ответа
+            # Валидация типов данных полученного тела ответа
             try:
                 UserCreate.CreateUserResponse(
                     code=create_user_response_json['code'],
