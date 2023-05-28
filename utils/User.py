@@ -14,7 +14,8 @@ class UserApi:
             # Выводим на печать Request body
             print(f"Request body: {UserCreate.input_json}")
             # Отправить GET запрос на /v2/user для создания пользователя
-            response = requests.request("POST", f"{ApiClient.api_url()}/v2/user", headers=ApiClient.headers(), data=create_user_request.json())
+            response = requests.request("POST", f"{ApiClient.api_url()}/v2/user", headers=ApiClient.headers(),
+                                        data=create_user_request.json())
             create_user_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, f"User creation error, response code: {response.status_code}," \
