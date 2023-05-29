@@ -20,8 +20,8 @@ class UserApi:
                                         data=create_user_request.json())
             create_user_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
-            assert response.status_code == 200, f"User creation error, response code: {response.status_code}," \
-                                                f"response body: {response.json()}"
+            assert response.status_code == 200, f"User creation error. Response code: {response.status_code}." \
+                                                f"Response body: {response.json()}"
             # Валидация типов данных полученного тела ответа
             try:
                 UserCreate.CreateUserResponse(
@@ -31,7 +31,7 @@ class UserApi:
                 )
             except ValidationError as e:
                 raise e
-            print(f'User creation success. Response body:, {response.text}, Response code:, {response.status_code}')
+            print(f'User creation success. Response body: {response.text} Response code: {response.status_code}')
             return username
         except requests.ConnectionError:
             print("API connection error")
@@ -45,8 +45,8 @@ class UserApi:
                                         headers=ApiClient.headers())
             delete_user_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
-            assert response.status_code == 200, f"User delete error, response code: {response.status_code}," \
-                                                f"response body: {response.json()}"
+            assert response.status_code == 200, f"User delete error. Response code: {response.status_code}" \
+                                                f"Response body: {response.json()}"
             # Валидация типов данных полученного тела ответа
             try:
                 UserDelete.DeleteUserResponse(
@@ -56,7 +56,7 @@ class UserApi:
                 )
             except ValidationError as e:
                 raise e
-            print(f'User delete success. Response body, {response.text}. Response code:, {response.status_code}')
+            print(f'User delete success. Response body: {response.text} Response code: {response.status_code}')
             return None
         except requests.ConnectionError:
             print("API connection error")
@@ -70,8 +70,8 @@ class UserApi:
                                         headers=ApiClient.headers())
             get_user_by_username_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
-            assert response.status_code == 200, f"Get user by username error, response code: {response.status_code}," \
-                                                f"response body: {response.json()}"
+            assert response.status_code == 200, f"Get user by username error. Response code: {response.status_code}" \
+                                                f"Response body: {response.json()}"
             # Валидация типов данных полученного тела ответа
             try:
                 UserGetByUsername.GetUserByUsernameResponse(
@@ -82,11 +82,38 @@ class UserApi:
                     email=get_user_by_username_response_json['email'],
                     password=get_user_by_username_response_json['password'],
                     phone=get_user_by_username_response_json['phone'],
-                    userStatus=get_user_by_username_response_json['userStatus'],
+                    userStatus=get_user_by_username_response_json['userStatus']
                 )
             except ValidationError as e:
                 raise e
-            print(f'User get by username success. Response body, {response.text}. Response code:, {response.status_code}')
+            print(f'User get by username success. Response body: {response.text}. Response code:'
+                  f'{response.status_code}')
+            return None
+        except requests.ConnectionError:
+            print("API connection error")
+
+    @staticmethod
+    def get_remote_user_by_username(username):
+        """Получаем пользователя по username"""
+        try:
+            # Отправить GET запрос на /user/{username} для получения пользователя
+            response = requests.request("GET", f"{ApiClient.api_url()}/user/{username}",
+                                        headers=ApiClient.headers())
+            get_remote_user_by_username_response_json = response.json()
+            # Проверяем, что API возвращает 200 код ответа
+            assert response.status_code == 404, f"Get remote user by username error. Response code:" \
+                                                f"{response.status_code} Response body: {response.json()}"
+            # Валидация типов данных полученного тела ответа
+            try:
+                UserGetByUsername.GetRemoteUserByUsernameResponse(
+                    code=get_remote_user_by_username_response_json['code'],
+                    type=get_remote_user_by_username_response_json['type'],
+                    message=get_remote_user_by_username_response_json['message']
+                )
+            except ValidationError as e:
+                raise e
+            print(f'User get by username success. Response body: {response.text} Response code:'
+                  f'{response.status_code}')
             return None
         except requests.ConnectionError:
             print("API connection error")
