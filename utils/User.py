@@ -1,7 +1,7 @@
 import requests
 import json
 from pydantic import ValidationError
-from basemodels import UserCreate, UserDelete
+from basemodels import UserCreate, UserDelete, UserGetByUsername
 from utils.ApiClient import ApiClient
 
 
@@ -57,6 +57,36 @@ class UserApi:
             except ValidationError as e:
                 raise e
             print(f'User delete success. Response body, {response.text}. Response code:, {response.status_code}')
-            return response.text
+            return None
+        except requests.ConnectionError:
+            print("API connection error")
+
+    @staticmethod
+    def get_user_by_username(username):
+        """Получаем пользователя по username"""
+        try:
+            # Отправить GET запрос на /user/{username} для получения пользователя
+            response = requests.request("GET", f"{ApiClient.api_url()}/user/{username}",
+                                        headers=ApiClient.headers())
+            get_user_by_username_response_json = response.json()
+            # Проверяем, что API возвращает 200 код ответа
+            assert response.status_code == 200, f"Get user by username error, response code: {response.status_code}," \
+                                                f"response body: {response.json()}"
+            # Валидация типов данных полученного тела ответа
+            try:
+                UserGetByUsername.GetUserByUsernameResponse(
+                    id=get_user_by_username_response_json['id'],
+                    username=get_user_by_username_response_json['username'],
+                    firstName=get_user_by_username_response_json['firstName'],
+                    lastName=get_user_by_username_response_json['lastName'],
+                    email=get_user_by_username_response_json['email'],
+                    password=get_user_by_username_response_json['password'],
+                    phone=get_user_by_username_response_json['phone'],
+                    userStatus=get_user_by_username_response_json['userStatus'],
+                )
+            except ValidationError as e:
+                raise e
+            print(f'User get by username success. Response body, {response.text}. Response code:, {response.status_code}')
+            return None
         except requests.ConnectionError:
             print("API connection error")
