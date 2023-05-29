@@ -1,7 +1,7 @@
 class ApiClient:
     @staticmethod
     def api_url():
-        return "https://petstore.swagger.io"
+        return "https://petstore.swagger.io/v2"
 
     @staticmethod
     def headers():
