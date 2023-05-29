@@ -100,7 +100,7 @@ class UserApi:
             response = requests.request("GET", f"{ApiClient.api_url()}/user/{username}",
                                         headers=ApiClient.headers())
             get_remote_user_by_username_response_json = response.json()
-            # Проверяем, что API возвращает 200 код ответа
+            # Проверяем, что API возвращает 404 код ответа
             assert response.status_code == 404, f"Get remote user by username error. Response code:" \
                                                 f"{response.status_code} Response body: {response.json()}"
             # Валидация типов данных полученного тела ответа
