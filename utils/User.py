@@ -1,7 +1,7 @@
 import requests
 import json
 from pydantic import ValidationError
-from basemodels import UserCreate, UserDelete, UserGetByUsername
+from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin
 from utils.ApiClient import ApiClient
 
 
@@ -14,7 +14,7 @@ class UserApi:
             create_user_request = UserCreate.CreateUserRequest.parse_raw(UserCreate.input_json)
             # Выводим на печать Request body
             print(f"Request body: {UserCreate.input_json}")
-            username = json.loads(UserCreate.input_json)['username']
+            username = json.loads(UserCreate.input_json)
             # Отправить POST запрос на /v2/user для создания пользователя
             response = requests.request("POST", f"{ApiClient.api_url()}/user", headers=ApiClient.headers(),
                                         data=create_user_request.json())
@@ -114,6 +114,32 @@ class UserApi:
                 raise e
             print(f'User get by username success. Response body: {response.text} Response code:'
                   f'{response.status_code}')
+            return None
+        except requests.ConnectionError:
+            print("API connection error")
+
+    @staticmethod
+    def user_login(username, password):
+        """Проходим авторизацию в систему"""
+        try:
+            # Отправить GET запрос на /user/login?username={username}&password={password}
+            response = requests.request("GET",
+                                        f"{ApiClient.api_url()}/user/login?username={username}&password={password}",
+                                        headers=ApiClient.headers())
+            user_login_response = response.json()
+            # Проверяем, что API возвращает 200 код ответа
+            assert response.status_code == 200, (f'User login into the system error. Response code:'
+                                                 f'{response.status_code} Response body: {response.json()}')
+            # Валидация типов данных полученного тела ответа
+            try:
+                UserLogin.CreateUserResponse(
+                    code=user_login_response['code'],
+                    type=user_login_response['type'],
+                    message=user_login_response['message']
+                )
+            except ValidationError as e:
+                raise e
+            print(f'User login success. Response body: {response.text} Response code: {response.status_code}')
             return None
         except requests.ConnectionError:
             print("API connection error")
