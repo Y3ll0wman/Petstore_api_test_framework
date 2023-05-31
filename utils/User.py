@@ -1,7 +1,7 @@
 import requests
 import json
 from pydantic import ValidationError
-from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin, UserUpdate
+from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin, UserUpdate, UserLogout
 from utils.ApiClient import ApiClient
 
 
@@ -132,7 +132,7 @@ class UserApi:
                                                  f'{response.status_code} Response body: {response.json()}')
             # Валидация типов данных полученного тела ответа
             try:
-                UserLogin.CreateUserResponse(
+                UserLogin.UserLoginResponse(
                     code=user_login_response['code'],
                     type=user_login_response['type'],
                     message=user_login_response['message']
@@ -163,7 +163,31 @@ class UserApi:
                 )
             except ValidationError as e:
                 raise e
-            print(f'User login success. Response body: {response.text} Response code: {response.status_code}')
+            print(f'Update user success. Response body: {response.text} Response code: {response.status_code}')
             return update_user_response
+        except requests.ConnectionError:
+            print("API connection error")
+
+    @staticmethod
+    def user_logout():
+        """Выйти из системы"""
+        try:
+            # Отправить GET запрос на /user/logout
+            response = requests.request("GET", f"{ApiClient.api_url()}/user/logout", headers=ApiClient.headers())
+            user_logout_response = response.json()
+            # Проверяем, что API возвращает 200 код ответа
+            assert response.status_code == 200, (f'Update user error. Response code: {response.status_code}'
+                                                 f' Response body: {response.json()}')
+            # Валидация типов данных полученного тела ответа
+            try:
+                UserLogout.UserLogOutResponse(
+                    code=user_logout_response['code'],
+                    type=user_logout_response['type'],
+                    message=user_logout_response['message']
+                )
+            except ValidationError as e:
+                raise e
+            print(f'User logout success. Response body: {response.text} Response code: {response.status_code}')
+            return None
         except requests.ConnectionError:
             print("API connection error")

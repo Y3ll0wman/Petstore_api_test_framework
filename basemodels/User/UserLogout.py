@@ -1,7 +1,7 @@
 from pydantic import BaseModel, validator
 
 
-class UserLoginResponse(BaseModel):
+class UserLogOutResponse(BaseModel):
     code: int
     type: str
     message: str
