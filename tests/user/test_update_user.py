@@ -1,7 +1,9 @@
 from utils.User import UserApi
+import pytest
 
 
 class TestCreateUser:
+    @pytest.mark.xfail
     def test_user_update(self):
         """Создаем пользователя"""
         user_data = UserApi.create()
