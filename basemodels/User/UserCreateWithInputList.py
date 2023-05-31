@@ -1,10 +1,12 @@
+from __future__ import annotations
+from typing import List
 from pydantic import BaseModel, validator
 from utils.RandomData import RandomData
 import json
 
 
-class CreateUserRequest(BaseModel):
-    id: int = 0
+class UserData(BaseModel):
+    id: int
     username: str
     firstName: str
     lastName: str
@@ -14,7 +16,11 @@ class CreateUserRequest(BaseModel):
     userStatus: int
 
 
-class CreateUserResponse(BaseModel):
+class CreateUserWithInputListRequest(BaseModel):
+    __root__: List[UserData]
+
+
+class CreateUserWithInputListResponse(BaseModel):
     code: int
     type: str
     message: str
@@ -39,6 +45,17 @@ class CreateUserResponse(BaseModel):
 
 
 input_json = json.dumps(
+[
+    {
+        "id": RandomData.user_id(),
+        "username": RandomData.username(),
+        "firstName": RandomData.first_name(),
+        "lastName": RandomData.last_name(),
+        "email": RandomData.email(),
+        "password": RandomData.password(),
+        "phone": RandomData.phone(),
+        "userStatus": 0
+    },
     {
         "id": RandomData.user_id(),
         "username": RandomData.username(),
@@ -49,4 +66,5 @@ input_json = json.dumps(
         "phone": RandomData.phone(),
         "userStatus": 0
     }
+]
 )

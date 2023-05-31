@@ -1,7 +1,8 @@
 import requests
 import json
 from pydantic import ValidationError
-from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin, UserUpdate, UserLogout
+from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin, UserUpdate, UserLogout,\
+    UserCreateWithInputList
 from utils.ApiClient import ApiClient
 
 
@@ -188,6 +189,37 @@ class UserApi:
             except ValidationError as e:
                 raise e
             print(f'User logout success. Response body: {response.text} Response code: {response.status_code}')
+            return None
+        except requests.ConnectionError:
+            print("API connection error")
+
+    @staticmethod
+    def create_user_with_input_list():
+        """Создаем пользователя"""
+        try:
+            # Собираем полезную нагрузку
+            create_user_with_input_list_request =\
+                UserCreateWithInputList.CreateUserWithInputListRequest.parse_raw(UserCreateWithInputList.input_json)
+            # Выводим на печать Request body
+            print(f"Request body: {UserCreateWithInputList.input_json}")
+            # Отправить POST запрос на /user/createWithList для создания пользователя
+            response = requests.request("POST", f"{ApiClient.api_url()}/user/createWithList",
+                                        headers=ApiClient.headers(), data=create_user_with_input_list_request.json())
+            create_user_with_input_list_json = response.json()
+            # Проверяем, что API возвращает 200 код ответа
+            assert response.status_code == 200, f"User creation with list error." \
+                                                f"Response code: {response.status_code} Response body: {response.json()}"
+            # Валидация типов данных полученного тела ответа
+            try:
+                UserCreateWithInputList.CreateUserWithInputListResponse(
+                    code=create_user_with_input_list_json['code'],
+                    type=create_user_with_input_list_json['type'],
+                    message=create_user_with_input_list_json['message']
+                )
+            except ValidationError as e:
+                raise e
+            print(f'User creation with list success. Response body: {response.text}'
+                  f' Response code: {response.status_code}')
             return None
         except requests.ConnectionError:
             print("API connection error")
