@@ -1,7 +1,7 @@
 import requests
 import json
 from pydantic import ValidationError
-from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin
+from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin, UserUpdate
 from utils.ApiClient import ApiClient
 
 
@@ -14,7 +14,7 @@ class UserApi:
             create_user_request = UserCreate.CreateUserRequest.parse_raw(UserCreate.input_json)
             # Выводим на печать Request body
             print(f"Request body: {UserCreate.input_json}")
-            username = json.loads(UserCreate.input_json)
+            user_data = json.loads(UserCreate.input_json)
             # Отправить POST запрос на /v2/user для создания пользователя
             response = requests.request("POST", f"{ApiClient.api_url()}/user", headers=ApiClient.headers(),
                                         data=create_user_request.json())
@@ -32,7 +32,7 @@ class UserApi:
             except ValidationError as e:
                 raise e
             print(f'User creation success. Response body: {response.text} Response code: {response.status_code}')
-            return username
+            return user_data
         except requests.ConnectionError:
             print("API connection error")
 
@@ -141,5 +141,29 @@ class UserApi:
                 raise e
             print(f'User login success. Response body: {response.text} Response code: {response.status_code}')
             return None
+        except requests.ConnectionError:
+            print("API connection error")
+
+    @staticmethod
+    def user_update(username):
+        """Обновляем пользователя"""
+        try:
+            # Отправить PUT запрос на /user/{username}
+            response = requests.request("PUT", f"{ApiClient.api_url()}/user/{username}", headers=ApiClient.headers())
+            update_user_response = response.json()
+            # Проверяем, что API возвращает 200 код ответа
+            assert response.status_code == 200, (f'Update user error. Response code: {response.status_code}'
+                                                 f' Response body: {response.json()}')
+            # Валидация типов данных полученного тела ответа
+            try:
+                UserUpdate.UserUpdateResponse(
+                    code=update_user_response['code'],
+                    type=update_user_response['type'],
+                    message=update_user_response['message']
+                )
+            except ValidationError as e:
+                raise e
+            print(f'User login success. Response body: {response.text} Response code: {response.status_code}')
+            return update_user_response
         except requests.ConnectionError:
             print("API connection error")
