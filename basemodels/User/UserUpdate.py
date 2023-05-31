@@ -38,28 +38,15 @@ class UserUpdateResponse(BaseModel):
         return v
 
 
-# input_json = json.dumps(
-#     {
-#         "id": RandomData.user_id(),
-#         "username": RandomData.username(),
-#         "firstName": RandomData.first_name(),
-#         "lastName": RandomData.last_name(),
-#         "email": RandomData.email(),
-#         "password": RandomData.password(),
-#         "phone": RandomData.phone(),
-#         "userStatus": 0
-#     }
-# )
-
 input_json = json.dumps(
     {
-        "id": 23,
-        "username": "YYYYT",
-        "firstName": "TYU",
-        "lastName": "QWE",
-        "email": "dwdaw@gmail.com",
-        "password": "`112345",
-        "phone": "+79998887766",
+        "id": RandomData.user_id(),
+        "username": RandomData.username(),
+        "firstName": RandomData.first_name(),
+        "lastName": RandomData.last_name(),
+        "email": RandomData.email(),
+        "password": RandomData.password(),
+        "phone": RandomData.phone(),
         "userStatus": 0
     }
 )
