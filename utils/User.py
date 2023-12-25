@@ -149,8 +149,14 @@ class UserApi:
     def user_update(username):
         """Обновляем пользователя"""
         try:
+            # Собираем полезную нагрузку
+            update_user_request = UserUpdate.UserUpdateRequest.parse_raw(UserUpdate.input_json)
+            # Выводим на печать Request body
+            print(f"Request body: {UserUpdate.input_json}")
+            user_data = json.loads(UserUpdate.input_json)
             # Отправить PUT запрос на /user/{username}
-            response = requests.request("PUT", f"{ApiClient.api_url()}/user/{username}", headers=ApiClient.headers())
+            response = requests.request("PUT", f"{ApiClient.api_url()}/user/{username}", headers=ApiClient.headers(),
+                                        data=update_user_request.json())
             update_user_response = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, (f'Update user error. Response code: {response.status_code}'
