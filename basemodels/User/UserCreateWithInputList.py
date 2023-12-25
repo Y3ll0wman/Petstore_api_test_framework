@@ -1,8 +1,8 @@
-from __future__ import annotations
+import json
+
 from typing import List
 from pydantic import BaseModel, validator
 from utils.RandomData import RandomData
-import json
 
 
 class UserData(BaseModel):

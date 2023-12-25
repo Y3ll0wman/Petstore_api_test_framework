@@ -1,6 +1,7 @@
+import json
+
 from pydantic import BaseModel, validator
 from utils.RandomData import RandomData
-import json
 
 
 class CreateUserRequest(BaseModel):
