@@ -1,8 +1,6 @@
 from utils.User import UserApi
 
 
-class TestCreateUser:
-    def test_user_update(self):
-        """Создаем пользователя"""
-        user_data = UserApi.create()
-        UserApi.user_update(username=user_data['username'])
+def test_user_update(api_url, headers):
+    user_data = UserApi.create(api_url, headers)
+    UserApi.user_update(api_url, headers, username=user_data['username'])

@@ -3,12 +3,11 @@ import json
 from pydantic import ValidationError
 from basemodels.User import UserCreate, UserDelete, UserGetByUsername, UserLogin, UserUpdate, UserLogout,\
     UserCreateWithInputList, UserCreateWithInputArray
-from utils.ApiClient import ApiClient
 
 
 class UserApi:
     @staticmethod
-    def create():
+    def create(api_url, headers):
         """Создаем пользователя"""
         try:
             # Собираем полезную нагрузку
@@ -17,7 +16,7 @@ class UserApi:
             print(f"Request body: {UserCreate.input_json}")
             user_data = json.loads(UserCreate.input_json)
             # Отправить POST запрос на /v2/user для создания пользователя
-            response = requests.request("POST", f"{ApiClient.api_url()}/user", headers=ApiClient.headers(),
+            response = requests.request("POST", f"{api_url}/user", headers=headers,
                                         data=create_user_request.json())
             create_user_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
@@ -38,12 +37,12 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def delete(username):
+    def delete(api_url, headers, username):
         """Удаляем пользователя"""
         try:
             # Отправить DELETE запрос на /user/{username} для удаления пользователя
-            response = requests.request("DELETE", f"{ApiClient.api_url()}/user/{username}",
-                                        headers=ApiClient.headers())
+            response = requests.request("DELETE", f"{api_url}/user/{username}",
+                                        headers=headers)
             delete_user_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, f"User delete error. Response code: {response.status_code}" \
@@ -63,12 +62,12 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def get_user_by_username(username):
+    def get_user_by_username(api_url, headers, username):
         """Получаем пользователя по username"""
         try:
             # Отправить GET запрос на /user/{username} для получения пользователя
-            response = requests.request("GET", f"{ApiClient.api_url()}/user/{username}",
-                                        headers=ApiClient.headers())
+            response = requests.request("GET", f"{api_url}/user/{username}",
+                                        headers=headers)
             get_user_by_username_response_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, f"Get user by username error. Response code: {response.status_code}" \
@@ -94,12 +93,12 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def get_remote_user_by_username(username):
+    def get_remote_user_by_username(api_url, headers, username):
         """Получаем пользователя по username"""
         try:
             # Отправить GET запрос на /user/{username} для получения пользователя
-            response = requests.request("GET", f"{ApiClient.api_url()}/user/{username}",
-                                        headers=ApiClient.headers())
+            response = requests.request("GET", f"{api_url}/user/{username}",
+                                        headers=headers)
             get_remote_user_by_username_response_json = response.json()
             # Проверяем, что API возвращает 404 код ответа
             assert response.status_code == 404, f"Get remote user by username error. Response code:" \
@@ -120,13 +119,13 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def user_login(username, password):
+    def user_login(api_url, headers, username, password):
         """Проходим авторизацию в систему"""
         try:
             # Отправить GET запрос на /user/login?username={username}&password={password}
             response = requests.request("GET",
-                                        f"{ApiClient.api_url()}/user/login?username={username}&password={password}",
-                                        headers=ApiClient.headers())
+                                        f"{api_url}/user/login?username={username}&password={password}",
+                                        headers=headers)
             user_login_response = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, (f'User login into the system error. Response code:'
@@ -146,7 +145,7 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def user_update(username):
+    def user_update(api_url, headers, username):
         """Обновляем пользователя"""
         try:
             # Собираем полезную нагрузку
@@ -155,7 +154,7 @@ class UserApi:
             print(f"Request body: {UserUpdate.input_json}")
             user_data = json.loads(UserUpdate.input_json)
             # Отправить PUT запрос на /user/{username}
-            response = requests.request("PUT", f"{ApiClient.api_url()}/user/{username}", headers=ApiClient.headers(),
+            response = requests.request("PUT", f"{api_url}/user/{username}", headers=headers,
                                         data=update_user_request.json())
             update_user_response = response.json()
             # Проверяем, что API возвращает 200 код ответа
@@ -176,11 +175,11 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def user_logout():
+    def user_logout(api_url, headers):
         """Выйти из системы"""
         try:
             # Отправить GET запрос на /user/logout
-            response = requests.request("GET", f"{ApiClient.api_url()}/user/logout", headers=ApiClient.headers())
+            response = requests.request("GET", f"{api_url}/user/logout", headers=headers)
             user_logout_response = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, (f'Update user error. Response code: {response.status_code}'
@@ -200,7 +199,7 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def create_user_with_input_list():
+    def create_user_with_input_list(api_url, headers):
         """Создаем пользователя"""
         try:
             # Собираем полезную нагрузку
@@ -209,8 +208,8 @@ class UserApi:
             # Выводим на печать Request body
             print(f"Request body: {UserCreateWithInputList.input_json}")
             # Отправить POST запрос на /user/createWithList для создания пользователя
-            response = requests.request("POST", f"{ApiClient.api_url()}/user/createWithList",
-                                        headers=ApiClient.headers(), data=create_user_with_input_list_request.json())
+            response = requests.request("POST", f"{api_url}/user/createWithList",
+                                        headers=headers, data=create_user_with_input_list_request.json())
             create_user_with_input_list_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, f"User creation with list error." \
@@ -231,7 +230,7 @@ class UserApi:
             print("API connection error")
 
     @staticmethod
-    def create_user_with_input_array():
+    def create_user_with_input_array( api_url, headers):
         """Создаем пользователя"""
         try:
             # Собираем полезную нагрузку
@@ -240,8 +239,8 @@ class UserApi:
             # Выводим на печать Request body
             print(f"Request body: {UserCreateWithInputArray.input_json}")
             # Отправить POST запрос на /user/createWithArray для создания пользователя
-            response = requests.request("POST", f"{ApiClient.api_url()}/user/createWithArray",
-                                        headers=ApiClient.headers(), data=create_user_with_input_array_request.json())
+            response = requests.request("POST", f"{api_url}/user/createWithArray",
+                                        headers=headers, data=create_user_with_input_array_request.json())
             create_user_with_input_array_json = response.json()
             # Проверяем, что API возвращает 200 код ответа
             assert response.status_code == 200, f"User creation with array error." \

@@ -1,6 +1,5 @@
 from utils.User import UserApi
 
 
-class TestUserLogout:
-    def test_user_logout(self):
-        UserApi.user_logout()
+def test_user_logout(api_url, headers):
+    UserApi.user_logout(api_url, headers)
