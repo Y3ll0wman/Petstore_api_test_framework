@@ -170,7 +170,7 @@ class UserApi:
             except ValidationError as e:
                 raise e
             print(f'Update user success. Response body: {response.text} Response code: {response.status_code}')
-            return update_user_response
+            return user_data
         except requests.ConnectionError:
             print("API connection error")
 
@@ -207,6 +207,7 @@ class UserApi:
                 UserCreateWithInputList.CreateUserWithInputListRequest.parse_raw(UserCreateWithInputList.input_json)
             # Выводим на печать Request body
             print(f"Request body: {UserCreateWithInputList.input_json}")
+            user_data = json.loads(UserCreateWithInputList.input_json)
             # Отправить POST запрос на /user/createWithList для создания пользователя
             response = requests.request("POST", f"{api_url}/user/createWithList",
                                         headers=headers, data=create_user_with_input_list_request.json())
@@ -225,7 +226,7 @@ class UserApi:
                 raise e
             print(f'User creation with list success. Response body: {response.text}'
                   f' Response code: {response.status_code}')
-            return None
+            return user_data
         except requests.ConnectionError:
             print("API connection error")
 
@@ -238,6 +239,7 @@ class UserApi:
                 UserCreateWithInputArray.CreateUserWithInputArrayRequest.parse_raw(UserCreateWithInputArray.input_json)
             # Выводим на печать Request body
             print(f"Request body: {UserCreateWithInputArray.input_json}")
+            user_data = json.loads(UserCreateWithInputArray.input_json)
             # Отправить POST запрос на /user/createWithArray для создания пользователя
             response = requests.request("POST", f"{api_url}/user/createWithArray",
                                         headers=headers, data=create_user_with_input_array_request.json())
@@ -257,6 +259,6 @@ class UserApi:
                 raise e
             print(f'User creation with array success. Response body: {response.text}'
                   f' Response code: {response.status_code}')
-            return None
+            return user_data
         except requests.ConnectionError:
             print("API connection error")
