@@ -1,6 +1,6 @@
-from utils.User import UserApi
+from petstore_api_test_framework.utils.user_api.logout import logout
 
 
 def test_user_logout(api_url, headers):
     # THEN
-    UserApi.user_logout(api_url, headers)
+    logout(api_url, headers)

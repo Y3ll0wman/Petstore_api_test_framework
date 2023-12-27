@@ -1,9 +1,10 @@
-from utils.User import UserApi
+from petstore_api_test_framework.utils.user_api.create import create
+from petstore_api_test_framework.utils.user_api.login import login
 
 
 def test_user_login(api_url, headers):
     # WHEN
-    user_data = UserApi.create(api_url, headers)
+    user_data = create(api_url, headers)
 
     # THEN
-    UserApi.user_login(api_url, headers, username=user_data['username'], password=user_data['password'])
+    login(api_url, headers, username=user_data['username'], password=user_data['password'])

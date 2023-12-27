@@ -2,7 +2,7 @@ import json
 
 from typing import List
 from pydantic import BaseModel, validator
-from utils.RandomData import RandomData
+from petstore_api_test_framework.utils import random_data
 
 
 class UserData(BaseModel):
@@ -47,23 +47,23 @@ class CreateUserWithInputListResponse(BaseModel):
 input_json = json.dumps(
 [
     {
-        "id": RandomData.user_id(),
-        "username": RandomData.username(),
-        "firstName": RandomData.first_name(),
-        "lastName": RandomData.last_name(),
-        "email": RandomData.email(),
-        "password": RandomData.password(),
-        "phone": RandomData.phone(),
+        "id": random_data.user_id(),
+        "username": random_data.username(),
+        "firstName": random_data.first_name(),
+        "lastName": random_data.last_name(),
+        "email": random_data.email(),
+        "password": random_data.password(),
+        "phone": random_data.phone(),
         "userStatus": 0
     },
     {
-        "id": RandomData.user_id(),
-        "username": RandomData.username(),
-        "firstName": RandomData.first_name(),
-        "lastName": RandomData.last_name(),
-        "email": RandomData.email(),
-        "password": RandomData.password(),
-        "phone": RandomData.phone(),
+        "id": random_data.user_id(),
+        "username": random_data.username(),
+        "firstName": random_data.first_name(),
+        "lastName": random_data.last_name(),
+        "email": random_data.email(),
+        "password": random_data.password(),
+        "phone": random_data.phone(),
         "userStatus": 0
     }
 ]

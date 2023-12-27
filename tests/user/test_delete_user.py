@@ -1,10 +1,12 @@
-from utils.User import UserApi
+from petstore_api_test_framework.utils.user_api.create import create
+from petstore_api_test_framework.utils.user_api.delete import delete
+from petstore_api_test_framework.utils.user_api.get_remote_user_by_username import get_remote_user_by_username
 
 
 def test_delete_user(api_url, headers):
     # WHEN
-    username = UserApi.create(api_url, headers)
+    username = create(api_url, headers)
+    delete(api_url, headers, username=username['username'])
 
     # THEN
-    UserApi.delete(api_url, headers, username=username['username'])
-    UserApi.get_remote_user_by_username(api_url, headers, username=username['username'])
+    get_remote_user_by_username(api_url, headers, username=username['username'])

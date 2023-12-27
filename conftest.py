@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture
 def api_url():
-    return 'https://petstore.swagger.io/v2'
+    return 'https://petstore.swagger.io'
 
 
 @pytest.fixture
