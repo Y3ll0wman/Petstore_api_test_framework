@@ -1,3 +1,5 @@
+import json
+
 import allure
 
 
@@ -13,7 +15,7 @@ def request_body(request_body_json):
 def response_body(response_body_json):
     allure.attach(
         name='Response body',
-        body=response_body_json,
+        body=json.dumps(response_body_json),
         attachment_type=allure.attachment_type.JSON,
         extension='json'
     )
