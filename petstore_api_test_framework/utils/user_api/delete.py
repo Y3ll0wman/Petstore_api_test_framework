@@ -25,10 +25,10 @@ def delete(api_url, headers, username):
             with allure.step('Валидация типов данных полученного тела ответа'):
                 try:
                     user_delete.DeleteUserResponse(
-                    code=delete_user_response_json['code'],
-                    type=delete_user_response_json['type'],
-                    message=delete_user_response_json['message']
-                )
+                        code=delete_user_response_json['code'],
+                        type=delete_user_response_json['type'],
+                        message=delete_user_response_json['message']
+                    )
 
                 except ValidationError as e:
                     with allure.step(f'Валидация типов данных не прошла, ошибка: {e}'):

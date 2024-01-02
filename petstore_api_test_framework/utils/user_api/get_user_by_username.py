@@ -19,8 +19,9 @@ def get_user_by_username(api_url, headers, username):
             with allure.step('Проверяем, что API возвращает 200 код ответа'):
                 allure_attach.response_code(str(response.status_code))
 
-                assert response.status_code == 200, f'Get user by username error. Response code: {response.status_code}' \
-                                                    f'Response body: {response.json()}'
+                assert response.status_code == 200, (f'Get user by username error. '
+                                                     f'Response code: {response.status_code} '
+                                                     f'Response body: {response.json()}')
 
             with allure.step('Валидация типов данных полученного тела ответа'):
                 try:

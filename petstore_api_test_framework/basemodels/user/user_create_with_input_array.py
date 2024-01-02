@@ -45,26 +45,26 @@ class CreateUserWithInputArrayResponse(BaseModel):
 
 
 input_json = json.dumps(
-[
-    {
-        "id": random_data.user_id(),
-        "username": random_data.username(),
-        "firstName": random_data.first_name(),
-        "lastName": random_data.last_name(),
-        "email": random_data.email(),
-        "password": random_data.password(),
-        "phone": random_data.phone(),
-        "userStatus": 0
-    },
-    {
-        "id": random_data.user_id(),
-        "username": random_data.username(),
-        "firstName": random_data.first_name(),
-        "lastName": random_data.last_name(),
-        "email": random_data.email(),
-        "password": random_data.password(),
-        "phone": random_data.phone(),
-        "userStatus": 0
-    }
-]
+    [
+        {
+            "id": random_data.user_id(),
+            "username": random_data.username(),
+            "firstName": random_data.first_name(),
+            "lastName": random_data.last_name(),
+            "email": random_data.email(),
+            "password": random_data.password(),
+            "phone": random_data.phone(),
+            "userStatus": 0
+        },
+        {
+            "id": random_data.user_id(),
+            "username": random_data.username(),
+            "firstName": random_data.first_name(),
+            "lastName": random_data.last_name(),
+            "email": random_data.email(),
+            "password": random_data.password(),
+            "phone": random_data.phone(),
+            "userStatus": 0
+        }
+    ]
 )

@@ -28,7 +28,7 @@ class TestCreateUser:
     @allure.label('owner', 'allure8')
     @allure.tag('regress', 'API', 'critical')
     @allure.severity('critical')
-    def test_create_user_with_input_array(self,api_url, headers):
+    def test_create_user_with_input_array(self, api_url, headers):
         # WHEN
         username = create_user_with_input_array(api_url, headers)
 

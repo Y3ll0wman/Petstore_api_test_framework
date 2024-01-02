@@ -14,7 +14,8 @@ def create_user_with_input_array(api_url, headers):
         try:
             with allure.step('Собираем полезную нагрузку'):
                 create_user_with_input_array_request = \
-                user_create_with_input_array.CreateUserWithInputArrayRequest.parse_raw(user_create_with_input_array.input_json).json()
+                    user_create_with_input_array.CreateUserWithInputArrayRequest.parse_raw(
+                        user_create_with_input_array.input_json).json()
                 allure_attach.request_body(create_user_with_input_array_request)
                 user_data = json.loads(user_create_with_input_array.input_json)
 
